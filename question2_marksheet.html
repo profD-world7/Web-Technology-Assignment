@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Mark Sheet Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 700px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .form-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        input[type="submit"]:hover {
+            background-color: #0b7dda;
+        }
+        .result-container {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border: 2px solid #2196F3;
+        }
+        .result-container h3 {
+            color: #2196F3;
+            text-align: center;
+        }
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .result-row:last-child {
+            border-bottom: none;
+        }
+        .result-label {
+            font-weight: bold;
+            color: #555;
+        }
+        .result-value {
+            color: #333;
+        }
+        .grade-a {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        .grade-b {
+            color: #2196F3;
+            font-weight: bold;
+        }
+        .grade-c {
+            color: #FF9800;
+            font-weight: bold;
+        }
+        .grade-fail {
+            color: #f44336;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Student Mark Sheet Generator</h2>
+        <form onsubmit="return generateMarksheet()" method="get">
+            <div class="form-group">
+                <label for="studentname_presha">Student Name:</label>
+                <input type="text" id="studentname_presha" name="studentname_presha">
+            </div>
+
+            <div class="form-group">
+                <label for="rollnumber_presha">Roll Number:</label>
+                <input type="number" id="rollnumber_presha" name="rollnumber_presha">
+            </div>
+
+            <div class="form-group">
+                <label for="english_presha">Marks in English (0-100):</label>
+                <input type="number" id="english_presha" name="english_presha" min="0" max="100">
+            </div>
+
+            <div class="form-group">
+                <label for="math_presha">Marks in Math (0-100):</label>
+                <input type="number" id="math_presha" name="math_presha" min="0" max="100">
+            </div>
+
+            <div class="form-group">
+                <label for="science_presha">Marks in Science (0-100):</label>
+                <input type="number" id="science_presha" name="science_presha" min="0" max="100">
+            </div>
+
+            <input type="submit" value="Generate Marksheet">
+        </form>
+
+        <div class="result-container" id="resultContainer_presha">
+            <h3>📊 Mark Sheet</h3>
+            <div class="result-row">
+                <span class="result-label">Student Name:</span>
+                <span class="result-value" id="displayName_presha"></span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">Roll Number:</span>
+                <span class="result-value" id="displayRoll_presha"></span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">English Marks:</span>
+                <span class="result-value" id="displayEnglish_presha"></span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">Math Marks:</span>
+                <span class="result-value" id="displayMath_presha"></span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">Science Marks:</span>
+                <span class="result-value" id="displayScience_presha"></span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">Total Marks:</span>
+                <span class="result-value" id="displayTotal_presha"></span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">Percentage:</span>
+                <span class="result-value" id="displayPercentage_presha"></span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">Grade:</span>
+                <span class="result-value" id="displayGrade_presha"></span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">Result:</span>
+                <span class="result-value" id="displayResult_presha"></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function generateMarksheet() {
+            // Get form values
+            let studentName = document.getElementById("studentname_presha").value;
+            let rollNumber = document.getElementById("rollnumber_presha").value;
+            let english = document.getElementById("english_presha").value;
+            let math = document.getElementById("math_presha").value;
+            let science = document.getElementById("science_presha").value;
+
+            // Validate empty fields
+            if (studentName === "" || rollNumber === "" || english === "" || math === "" || science === "") {
+                alert("All fields are required!");
+                return false;
+            }
+
+            // Convert to numbers
+            english = parseInt(english);
+            math = parseInt(math);
+            science = parseInt(science);
+
+            // Validate marks range
+            if (english < 0 || english > 100) {
+                alert("English marks must be between 0 and 100");
+                return false;
+            }
+            if (math < 0 || math > 100) {
+                alert("Math marks must be between 0 and 100");
+                return false;
+            }
+            if (science < 0 || science > 100) {
+                alert("Science marks must be between 0 and 100");
+                return false;
+            }
+
+            // Calculate total and percentage
+            let total = english + math + science;
+            let percentage = (total / 300 * 100).toFixed(2);
+
+            // Determine grade
+            let grade = "";
+            let gradeClass = "";
+            if (percentage >= 80) {
+                grade = "A";
+                gradeClass = "grade-a";
+            } else if (percentage >= 60) {
+                grade = "B";
+                gradeClass = "grade-b";
+            } else if (percentage >= 40) {
+                grade = "C";
+                gradeClass = "grade-c";
+            } else {
+                grade = "Fail";
+                gradeClass = "grade-fail";
+            }
+
+            // Determine result (Pass if all subjects >= 40)
+            let result = "";
+            let resultClass = "";
+            if (english >= 40 && math >= 40 && science >= 40) {
+                result = "PASS ✓";
+                resultClass = "grade-a";
+            } else {
+                result = "FAIL ✗";
+                resultClass = "grade-fail";
+            }
+
+            // Display results
+            document.getElementById("displayName_presha").textContent = studentName;
+            document.getElementById("displayRoll_presha").textContent = rollNumber;
+            document.getElementById("displayEnglish_presha").textContent = english;
+            document.getElementById("displayMath_presha").textContent = math;
+            document.getElementById("displayScience_presha").textContent = science;
+            document.getElementById("displayTotal_presha").textContent = total + " / 300";
+            document.getElementById("displayPercentage_presha").textContent = percentage + "%";
+            
+            let gradeElement = document.getElementById("displayGrade_presha");
+            gradeElement.textContent = grade;
+            gradeElement.className = "result-value " + gradeClass;
+
+            let resultElement = document.getElementById("displayResult_presha");
+            resultElement.textContent = result;
+            resultElement.className = "result-value " + resultClass;
+
+            // Show result container
+            document.getElementById("resultContainer_presha").style.display = "block";
+
+            return false; // Prevent form submission
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Course Enrollment Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .form-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: bold;
+        }
+        input[type="text"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        .radio-group {
+            margin: 10px 0;
+        }
+        .radio-group label {
+            display: inline;
+            margin-right: 15px;
+            font-weight: normal;
+        }
+        input[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            background-color: #9C27B0;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        input[type="submit"]:hover {
+            background-color: #7B1FA2;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Online Course Enrollment Form</h2>
+        <form onsubmit="return validateForm()" method="get">
+            <div class="form-group">
+                <label for="studentname_presha">Student Name:</label>
+                <input type="text" id="studentname_presha" name="studentname_presha">
+            </div>
+
+            <div class="form-group">
+                <label for="email_presha">Email:</label>
+                <input type="text" id="email_presha" name="email_presha">
+            </div>
+
+            <div class="form-group">
+                <label for="course_presha">Course Name:</label>
+                <select id="course_presha" name="course_presha">
+                    <option value="">-- Select Course --</option>
+                    <option value="Web Development">Web Development</option>
+                    <option value="Data Science">Data Science</option>
+                    <option value="Machine Learning">Machine Learning</option>
+                    <option value="Mobile App Development">Mobile App Development</option>
+                    <option value="Digital Marketing">Digital Marketing</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Mode of Study:</label>
+                <div class="radio-group">
+                    <input type="radio" id="online_presha" name="mode_presha" value="Online">
+                    <label for="online_presha">Online</label>
+                    <input type="radio" id="offline_presha" name="mode_presha" value="Offline">
+                    <label for="offline_presha">Offline</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Previous Experience:</label>
+                <div class="radio-group">
+                    <input type="radio" id="exp_yes_presha" name="experience_presha" value="Yes" onchange="toggleExperienceDetails()">
+                    <label for="exp_yes_presha">Yes</label>
+                    <input type="radio" id="exp_no_presha" name="experience_presha" value="No" onchange="toggleExperienceDetails()">
+                    <label for="exp_no_presha">No</label>
+                </div>
+            </div>
+
+            <div class="form-group hidden" id="experienceDetailsGroup_presha">
+                <label for="experiencedetails_presha">Experience Details:</label>
+                <textarea id="experiencedetails_presha" name="experiencedetails_presha" placeholder="Please describe your previous experience..."></textarea>
+            </div>
+
+            <input type="submit" value="Enroll Now">
+        </form>
+    </div>
+
+    <script>
+        function toggleExperienceDetails() {
+            let experience = document.querySelector('input[name="experience_presha"]:checked');
+            let detailsGroup = document.getElementById("experienceDetailsGroup_presha");
+            
+            if (experience && experience.value === "Yes") {
+                detailsGroup.classList.remove("hidden");
+            } else {
+                detailsGroup.classList.add("hidden");
+                document.getElementById("experiencedetails_presha").value = "";
+            }
+        }
+
+        function validateForm() {
+            // Get form values
+            let studentName = document.getElementById("studentname_presha").value;
+            let email = document.getElementById("email_presha").value;
+            let course = document.getElementById("course_presha").value;
+            let mode = document.querySelector('input[name="mode_presha"]:checked');
+            let experience = document.querySelector('input[name="experience_presha"]:checked');
+            let experienceDetails = document.getElementById("experiencedetails_presha").value;
+
+            // Validate Student Name
+            if (studentName === "") {
+                alert("Student Name is required");
+                return false;
+            }
+
+            // Validate Email
+            if (email === "") {
+                alert("Email is required");
+                return false;
+            }
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                alert("Email must be in valid format");
+                return false;
+            }
+
+            // Validate Course Selection
+            if (course === "") {
+                alert("Please select a course");
+                return false;
+            }
+
+            // Validate Mode of Study
+            if (!mode) {
+                alert("Please select a mode of study (Online or Offline)");
+                return false;
+            }
+
+            // Validate Previous Experience
+            if (!experience) {
+                alert("Please select whether you have previous experience");
+                return false;
+            }
+
+            // If experience is Yes, validate experience details
+            if (experience.value === "Yes") {
+                if (experienceDetails.trim() === "") {
+                    alert("Please provide your experience details");
+                    return false;
+                }
+            }
+
+            // Success message
+            alert("Enrollment Successful!\n\nStudent: " + studentName + "\nCourse: " + course + "\nMode: " + mode.value);
+
+            return false; // Prevent actual form submission
+        }
+    </script>
+</body>
+</html>

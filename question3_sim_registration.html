@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIM Card Registration Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .form-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="date"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .radio-group {
+            margin: 10px 0;
+        }
+        .radio-group label {
+            display: inline;
+            margin-right: 15px;
+            font-weight: normal;
+        }
+        .checkbox-group {
+            margin: 15px 0;
+        }
+        .checkbox-group label {
+            display: inline;
+            font-weight: normal;
+        }
+        input[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            background-color: #FF5722;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        input[type="submit"]:hover {
+            background-color: #E64A19;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>SIM Card Registration Form</h2>
+        <form onsubmit="return validateForm()" method="get">
+            <div class="form-group">
+                <label for="fullname_presha">Full Name:</label>
+                <input type="text" id="fullname_presha" name="fullname_presha">
+            </div>
+
+            <div class="form-group">
+                <label for="citizenship_presha">Citizenship Number:</label>
+                <input type="text" id="citizenship_presha" name="citizenship_presha">
+            </div>
+
+            <div class="form-group">
+                <label>SIM Type:</label>
+                <div class="radio-group">
+                    <input type="radio" id="prepaid_presha" name="simtype_presha" value="Prepaid">
+                    <label for="prepaid_presha">Prepaid</label>
+                    <input type="radio" id="postpaid_presha" name="simtype_presha" value="Postpaid">
+                    <label for="postpaid_presha">Postpaid</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="dob_presha">Date of Birth:</label>
+                <input type="date" id="dob_presha" name="dob_presha">
+            </div>
+
+            <div class="form-group">
+                <label for="nationality_presha">Nationality:</label>
+                <select id="nationality_presha" name="nationality_presha">
+                    <option value="">-- Select Nationality --</option>
+                    <option value="Nepali">Nepali</option>
+                    <option value="Indian">Indian</option>
+                    <option value="Chinese">Chinese</option>
+                    <option value="American">American</option>
+                    <option value="British">British</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="terms_presha" name="terms_presha">
+                <label for="terms_presha">I Accept Terms & Conditions</label>
+            </div>
+
+            <input type="submit" value="Register SIM Card">
+        </form>
+    </div>
+
+    <script>
+        function validateForm() {
+            // Get form values
+            let fullname = document.getElementById("fullname_presha").value;
+            let citizenship = document.getElementById("citizenship_presha").value;
+            let simtype = document.querySelector('input[name="simtype_presha"]:checked');
+            let dob = document.getElementById("dob_presha").value;
+            let nationality = document.getElementById("nationality_presha").value;
+            let terms = document.getElementById("terms_presha").checked;
+
+            // Validate Full Name
+            if (fullname === "") {
+                alert("Full Name is required");
+                return false;
+            }
+            if (!/^[A-Za-z\s]+$/.test(fullname)) {
+                alert("Name must contain only letters");
+                return false;
+            }
+
+            // Validate Citizenship Number
+            if (citizenship === "") {
+                alert("Citizenship Number is required");
+                return false;
+            }
+            if (citizenship.length < 10) {
+                alert("Citizenship number must be at least 10 characters");
+                return false;
+            }
+
+            // Validate SIM Type
+            if (!simtype) {
+                alert("Please select a SIM type (Prepaid or Postpaid)");
+                return false;
+            }
+
+            // Validate Date of Birth and Age
+            if (dob === "") {
+                alert("Date of Birth is required");
+                return false;
+            }
+
+            // Calculate age
+            let birthDate = new Date(dob);
+            let today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            let monthDiff = today.getMonth() - birthDate.getMonth();
+            
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+
+            if (age < 18) {
+                alert("You must be 18 or above to register a SIM card");
+                return false;
+            }
+
+            // Validate Nationality
+            if (nationality === "") {
+                alert("Please select a nationality");
+                return false;
+            }
+
+            // Validate Terms & Conditions
+            if (!terms) {
+                alert("You must accept the Terms & Conditions");
+                return false;
+            }
+
+            // Success message
+            alert("SIM Card Registration Successful!\n\nName: " + fullname + "\nCitizenship: " + citizenship + "\nSIM Type: " + simtype.value);
+
+            return false; // Prevent actual form submission
+        }
+    </script>
+</body>
+</html>

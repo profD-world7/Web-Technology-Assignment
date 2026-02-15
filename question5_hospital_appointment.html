@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Appointment Booking Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .form-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            background-color: #00BCD4;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        input[type="submit"]:hover {
+            background-color: #0097A7;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Hospital Appointment Booking</h2>
+        <form onsubmit="return validateForm()" method="get">
+            <div class="form-group">
+                <label for="patientname_presha">Patient Name:</label>
+                <input type="text" id="patientname_presha" name="patientname_presha">
+            </div>
+
+            <div class="form-group">
+                <label for="age_presha">Age:</label>
+                <input type="number" id="age_presha" name="age_presha">
+            </div>
+
+            <div class="form-group">
+                <label for="phone_presha">Phone Number:</label>
+                <input type="text" id="phone_presha" name="phone_presha">
+            </div>
+
+            <div class="form-group">
+                <label for="department_presha">Department:</label>
+                <select id="department_presha" name="department_presha">
+                    <option value="">-- Select Department --</option>
+                    <option value="General Medicine">General Medicine</option>
+                    <option value="Cardiology">Cardiology</option>
+                    <option value="Orthopedics">Orthopedics</option>
+                    <option value="Pediatrics">Pediatrics</option>
+                    <option value="Dermatology">Dermatology</option>
+                    <option value="ENT">ENT</option>
+                    <option value="Neurology">Neurology</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="appointmentdate_presha">Appointment Date:</label>
+                <input type="date" id="appointmentdate_presha" name="appointmentdate_presha">
+            </div>
+
+            <div class="form-group">
+                <label for="timeslot_presha">Time Slot:</label>
+                <select id="timeslot_presha" name="timeslot_presha">
+                    <option value="">-- Select Time Slot --</option>
+                    <option value="9:00 AM - 10:00 AM">9:00 AM - 10:00 AM</option>
+                    <option value="10:00 AM - 11:00 AM">10:00 AM - 11:00 AM</option>
+                    <option value="11:00 AM - 12:00 PM">11:00 AM - 12:00 PM</option>
+                    <option value="12:00 PM - 1:00 PM">12:00 PM - 1:00 PM</option>
+                    <option value="2:00 PM - 3:00 PM">2:00 PM - 3:00 PM</option>
+                    <option value="3:00 PM - 4:00 PM">3:00 PM - 4:00 PM</option>
+                    <option value="4:00 PM - 5:00 PM">4:00 PM - 5:00 PM</option>
+                </select>
+            </div>
+
+            <input type="submit" value="Book Appointment">
+        </form>
+    </div>
+
+    <script>
+        function validateForm() {
+            // Get form values
+            let patientName = document.getElementById("patientname_presha").value;
+            let age = document.getElementById("age_presha").value;
+            let phone = document.getElementById("phone_presha").value;
+            let department = document.getElementById("department_presha").value;
+            let appointmentDate = document.getElementById("appointmentdate_presha").value;
+            let timeSlot = document.getElementById("timeslot_presha").value;
+
+            // Validate Patient Name
+            if (patientName === "") {
+                alert("Patient Name is required");
+                return false;
+            }
+            if (!/^[A-Za-z\s]+$/.test(patientName)) {
+                alert("Name must contain only letters");
+                return false;
+            }
+
+            // Validate Age
+            if (age === "") {
+                alert("Age is required");
+                return false;
+            }
+            age = parseInt(age);
+            if (age <= 0) {
+                alert("Age must be greater than 0");
+                return false;
+            }
+
+            // Validate Phone Number
+            if (phone === "") {
+                alert("Phone Number is required");
+                return false;
+            }
+            if (!/^(98|97)\d{8}$/.test(phone)) {
+                alert("Phone number must be 10 digits and start with 98 or 97");
+                return false;
+            }
+
+            // Validate Department
+            if (department === "") {
+                alert("Please select a department");
+                return false;
+            }
+
+            // Validate Appointment Date
+            if (appointmentDate === "") {
+                alert("Appointment Date is required");
+                return false;
+            }
+
+            // Check if date is not in the past
+            let selectedDate = new Date(appointmentDate);
+            let today = new Date();
+            today.setHours(0, 0, 0, 0); // Reset time to midnight for accurate comparison
+
+            if (selectedDate < today) {
+                alert("Appointment date cannot be in the past");
+                return false;
+            }
+
+            // Validate Time Slot
+            if (timeSlot === "") {
+                alert("Please select a time slot");
+                return false;
+            }
+
+            // Success - Display confirmation message with patient name
+            alert("Appointment Confirmed!\n\nPatient Name: " + patientName + "\nDepartment: " + department + "\nDate: " + appointmentDate + "\nTime: " + timeSlot + "\n\nThank you for booking with us!");
+
+            return false; // Prevent actual form submission
+        }
+    </script>
+</body>
+</html>
